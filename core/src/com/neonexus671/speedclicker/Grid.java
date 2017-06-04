@@ -86,8 +86,8 @@ public class Grid {
     public void populateColorArray(){
         colorArray.add(Color.BLUE);
         colorArray.add(Color.RED);
-        colorArray.add(Color.GREEN);
-        colorArray.add(Color.GOLD);
+        colorArray.add(Color.VIOLET);
+        colorArray.add(Color.ORANGE);
     }
     public void populateCountArray(){
         for (Color c:colorArray) {
