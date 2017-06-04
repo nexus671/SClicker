@@ -13,14 +13,20 @@ import java.util.Random;
 public class Grid {
     private int size;
     private Array<Unit> units;
-    Random random;
+    private Random random;
     private  int numberOfWhiteSquares;
+    private Array<colorNumber> countOfColors;
+    private Array<Color> colorArray;
 
     public Grid(int size){
         this.random = new Random();
         this.size = size;
         this.numberOfWhiteSquares = size*size;
         units = new Array<Unit>();
+        colorArray = new Array<Color>();
+        countOfColors = new Array<colorNumber>();
+        populateColorArray();
+        populateCountArray();
         createGrid(size,0);
     }
 
@@ -44,7 +50,7 @@ public class Grid {
             int randomNumber = random.nextInt((size * size));
             do {
                 if(units.get(randomNumber).getColor() == Color.WHITE){
-                    units.get(randomNumber).randomizeColor();
+                    units.get(randomNumber).setColor(randomizeColor());
                     numberOfWhiteSquares--;
                 }else {
                     randomNumber = random.nextInt((size * size) );
@@ -56,14 +62,63 @@ public class Grid {
         return true;
     }
     public void resetUnit(int unitNumber){
+        for (colorNumber c:countOfColors) {
+            if(c.getColor() == units.get(unitNumber).getColor()){
+                c.setCount(c.getCount()-1);
+            }
+        }
         units.get(unitNumber).setColor(Color.WHITE);
         numberOfWhiteSquares++;
     }
     public void resetUnit(Unit unit){
+        for (colorNumber c:countOfColors) {
+            if(c.getColor() == unit.getColor()){
+                c.setCount(c.getCount()-1);
+            }
+        }
         unit.setColor(Color.WHITE);
         numberOfWhiteSquares++;
     }
 
+    public boolean isFull(){
+        return numberOfWhiteSquares == 0;
+    }
+    public void populateColorArray(){
+        colorArray.add(Color.BLUE);
+        colorArray.add(Color.RED);
+        colorArray.add(Color.GREEN);
+        colorArray.add(Color.GOLD);
+    }
+    public void populateCountArray(){
+        for (Color c:colorArray) {
+            countOfColors.add(new colorNumber(c));
+        }
+    }
+    public Color randomizeColor(){
+        Color color;
+        int total = 0;
+        boolean notSpawned = true;
+        for (colorNumber c : countOfColors) {
+            total += c.getCount();
+        }
+        do {
+            color = colorArray.get(random.nextInt(colorArray.size));
+            for (colorNumber c : countOfColors) {
+                if (c.getColor() == color) {
+                    if (c.getCount() <= total - c.getCount()) {
+                        notSpawned = false;
+                        break;
+                    }
+                }
+            }
+        }while (notSpawned);
+        for (colorNumber c:countOfColors) {
+            if(c.getColor() == color){
+                c.setCount(c.getCount()+1);
+            }
+        }
+        return color;
+    }
     public float getSize() {
         return size;
     }

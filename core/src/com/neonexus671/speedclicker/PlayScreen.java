@@ -4,9 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.util.Random;
 
 /**
  * Created by acurr on 6/2/2017.
@@ -14,17 +15,20 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class PlayScreen implements Screen {
     private final SClicker game;
     private final Viewport gameViewPort;
-    private Stage stage;
     private Grid grid;
+    private Color lastColorpressed;
+    private Random random;
+    int timer;
+    int score;
 
     public PlayScreen(SClicker game) {
         this.game = game;
+        random = new Random();
+        timer = 100;
+        score = 0;
         gameViewPort = new StretchViewport(SClicker.GAME_WIDTH * game.aspectRatio, SClicker.GAME_HEIGHT);
-        stage = new Stage(gameViewPort);
         grid = new Grid(4);
-        for (Unit u:grid.getUnits()) {
-            stage.addActor(u);
-        }
+        lastColorpressed = Color.WHITE;
         grid.randomSpawnColor();
         grid.randomSpawnColor();
     }
@@ -45,27 +49,45 @@ public class PlayScreen implements Screen {
         if(Gdx.input.justTouched()) {
             handleInput();
         }
+        createRandomSpawn();
         game.batch.end();
-        //stage.act();
-        //stage.draw();
     }
 
     public  void handleInput(){
              if (Gdx.input.isTouched()) {
                      for (Unit u:grid.getUnits()) {
                          if(u.getRectangle().contains(Gdx.input.getX(),Gdx.graphics.getHeight()-Gdx.input.getY())){
-                            if(u.getColor() == Color.WHITE){
-                                System.out.println("Lose");
+                            if(u.getColor() == Color.WHITE || u.getColor() == lastColorpressed){
+                                incorrect();
                             }else {
-                                grid.resetUnit(u);
-
-                                grid.randomSpawnColor();
-
+                                correct(u);
                             }
                          }
                      }
-
              }
+    }
+    public void createRandomSpawn(){
+        timer--;
+        if(timer == 0){
+            timer = 100;
+            int amountSpawn = 1+ random.nextInt(2);
+            for(int i = 0;i < amountSpawn;i++){
+                grid.randomSpawnColor();
+            }
+        }
+        if(grid.isFull()){
+            incorrect();
+        }
+    }
+
+    public void correct(Unit u){
+        lastColorpressed = u.getColor();
+        grid.resetUnit(u);
+        score++;
+        System.out.println(score);
+    }
+    public void incorrect(){
+
     }
     @Override
     public void resize(int width, int height) {

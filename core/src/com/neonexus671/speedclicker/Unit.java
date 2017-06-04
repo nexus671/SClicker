@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.Random;
@@ -24,16 +23,12 @@ public class Unit extends Actor {
     private float alpha;
     private int shape;
     private Vector2 vector2;
-    private Array<Color> colorArray;
+
     Random random;
     Rectangle rectangle;
+    public static final float ALPHA_DECREASE_RATE = .01F;
     public Unit(int shape, Vector2 vector2, int height,int width) {
         this.color = Color.WHITE;
-        colorArray = new Array<Color>();
-        colorArray.add(Color.BLUE);
-        colorArray.add(Color.RED);
-        colorArray.add(Color.GREEN);
-        colorArray.add(Color.GOLD);
         random = new Random();
         setPosition(vector2.x,vector2.y);
         setWidth(width);
@@ -44,8 +39,6 @@ public class Unit extends Actor {
         this.alpha = 1.0f;
         this.shape = shape;
         this.vector2 = vector2;
-        addListener(new ClickListener());
-
     }
 
     private void createTexture(int height,int width, Color color, int shape) {
@@ -59,7 +52,7 @@ public class Unit extends Actor {
     @Override
     public void draw(Batch batch,float parentalpha) {
         if (color != Color.WHITE) {
-            alpha = alpha - .01f;
+            alpha = alpha - ALPHA_DECREASE_RATE;
         }
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, alpha);
@@ -77,13 +70,13 @@ public class Unit extends Actor {
         createTexture((int)getHeight(),(int)getWidth(), color, shape);
     }
 
+
+
     public Rectangle getRectangle(){
         return rectangle;
     }
 
-    public void randomizeColor(){
-        setColor(colorArray.get(random.nextInt(colorArray.size)));
-    }
+
 
     public Sprite getSprite() {
         return sprite;
