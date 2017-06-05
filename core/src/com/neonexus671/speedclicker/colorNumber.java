@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.Color;
  * Created by acurr on 6/4/2017.
  */
 public class colorNumber {
-    Color color;
-    int count;
+    private Color color;
+    private int count;
 
     public colorNumber(Color color) {
         this.color = color;

@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.utils.Array;
 
 import java.util.Random;
 
@@ -17,6 +16,9 @@ import java.util.Random;
  * Created by acurr on 6/2/2017.
  */
 public class Unit extends Actor {
+    private static final float ALPHA_DECREASE_RATE = .01F;
+    private final Random random;
+    private final Rectangle rectangle;
     private Color color;
     private Sprite sprite;
     private Texture texture;
@@ -24,24 +26,21 @@ public class Unit extends Actor {
     private int shape;
     private Vector2 vector2;
 
-    Random random;
-    Rectangle rectangle;
-    public static final float ALPHA_DECREASE_RATE = .01F;
-    public Unit(int shape, Vector2 vector2, int height,int width) {
+    public Unit(int shape, Vector2 vector2, int height, int width) {
         this.color = Color.WHITE;
         random = new Random();
-        setPosition(vector2.x,vector2.y);
+        setPosition(vector2.x, vector2.y);
         setWidth(width);
         setHeight(height);
-        rectangle = new Rectangle(vector2.x,vector2.y,width,height);
-        createTexture(height,width, color, shape);
+        rectangle = new Rectangle(vector2.x, vector2.y, width, height);
+        createTexture(height, width, color, shape);
         this.sprite = new Sprite(texture);
         this.alpha = 1.0f;
         this.shape = shape;
         this.vector2 = vector2;
     }
 
-    private void createTexture(int height,int width, Color color, int shape) {
+    private void createTexture(int height, int width, Color color, int shape) {
         Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
         pixmap.setColor(color);
         pixmap.fillRectangle(0, 0, width, height);
@@ -50,7 +49,7 @@ public class Unit extends Actor {
     }
 
     @Override
-    public void draw(Batch batch,float parentalpha) {
+    public void draw(Batch batch, float parentAlpha) {
         if (color != Color.WHITE) {
             alpha = alpha - ALPHA_DECREASE_RATE;
         }
@@ -67,15 +66,13 @@ public class Unit extends Actor {
         this.color = color;
         setAlpha(1.0f);
         this.texture.dispose();
-        createTexture((int)getHeight(),(int)getWidth(), color, shape);
+        createTexture((int) getHeight(), (int) getWidth(), color, shape);
     }
 
 
-
-    public Rectangle getRectangle(){
+    public Rectangle getRectangle() {
         return rectangle;
     }
-
 
 
     public Sprite getSprite() {
@@ -98,7 +95,7 @@ public class Unit extends Actor {
         return alpha;
     }
 
-    public void setAlpha(float alpha) {
+    private void setAlpha(float alpha) {
         this.alpha = alpha;
     }
 
