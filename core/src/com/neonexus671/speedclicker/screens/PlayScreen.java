@@ -1,4 +1,4 @@
-package com.neonexus671.speedclicker;
+package com.neonexus671.speedclicker.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.neonexus671.speedclicker.gridSystem.Grid;
+import com.neonexus671.speedclicker.SClicker;
+import com.neonexus671.speedclicker.gridSystem.Unit;
 
 import java.util.Random;
 
@@ -27,7 +30,7 @@ public class PlayScreen implements Screen {
         timer = 100;
         score = 0;
         gameViewPort = new StretchViewport(SClicker.GAME_WIDTH * game.aspectRatio, SClicker.GAME_HEIGHT);
-        grid = new Grid(2);
+        grid = new Grid(4);
         lastColorPressed = Color.WHITE;
         grid.randomSpawnColor();
         grid.randomSpawnColor();
@@ -52,12 +55,23 @@ public class PlayScreen implements Screen {
         if (Gdx.input.justTouched()) {
             handleInput();
         }
+        if(grid.isEmpty()){
+            grid.randomSpawnColor();
+        }
         createRandomSpawn();
+
         game.batch.end();
     }
 
     private void incorrect() {
         System.out.println("Death");
+    }
+    private void correct(Unit u) {
+        lastColorPressed = u.getColor();
+        grid.resetUnit(u);
+        score++;
+        timer = timer-5;
+        System.out.println(score);
     }
 
     private void handleInput() {
@@ -76,9 +90,9 @@ public class PlayScreen implements Screen {
 
     private void createRandomSpawn() {
         timer--;
-        if (timer == 0) {
+        if (timer <= 0) {
             timer = 100;
-            int amountSpawn = 1 + random.nextInt(2);
+            int amountSpawn = 1 + random.nextInt(getMaxSpawn());
             for (int i = 0; i < amountSpawn; i++) {
                 grid.randomSpawnColor();
             }
@@ -88,16 +102,16 @@ public class PlayScreen implements Screen {
         }
     }
 
-    private void correct(Unit u) {
-        lastColorPressed = u.getColor();
-        grid.resetUnit(u);
-        score++;
-        System.out.println(score);
+    private int getMaxSpawn(){
+        float size = grid.getSize();
+        return  (int)Math.ceil(size*size * .3);
     }
+
+
 
     @Override
     public void resize(int width, int height) {
-
+        grid.updateGridPos();
     }
 
     @Override

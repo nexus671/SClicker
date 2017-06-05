@@ -1,4 +1,4 @@
-package com.neonexus671.speedclicker;
+package com.neonexus671.speedclicker.gridSystem;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -16,9 +16,10 @@ import java.util.Random;
  * Created by acurr on 6/2/2017.
  */
 public class Unit extends Actor {
-    private static final float ALPHA_DECREASE_RATE = .01F;
+    private static final float ALPHA_DECREASE_RATE = .002F;
+    private boolean colorFade;
     private final Random random;
-    private final Rectangle rectangle;
+    private Rectangle rectangle;
     private Color color;
     private Sprite sprite;
     private Texture texture;
@@ -26,12 +27,13 @@ public class Unit extends Actor {
     private int shape;
     private Vector2 vector2;
 
-    public Unit(int shape, Vector2 vector2, int height, int width) {
+    public Unit(int shape, Vector2 vector2, int height, int width,boolean colorFade) {
         this.color = Color.WHITE;
         random = new Random();
         setPosition(vector2.x, vector2.y);
         setWidth(width);
         setHeight(height);
+        this.colorFade = colorFade;
         rectangle = new Rectangle(vector2.x, vector2.y, width, height);
         createTexture(height, width, color, shape);
         this.sprite = new Sprite(texture);
@@ -39,6 +41,8 @@ public class Unit extends Actor {
         this.shape = shape;
         this.vector2 = vector2;
     }
+
+
 
     private void createTexture(int height, int width, Color color, int shape) {
         Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
@@ -50,7 +54,7 @@ public class Unit extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if (color != Color.WHITE) {
+        if (colorFade && color != Color.WHITE) {
             alpha = alpha - ALPHA_DECREASE_RATE;
         }
         Color color = getColor();
@@ -69,6 +73,9 @@ public class Unit extends Actor {
         createTexture((int) getHeight(), (int) getWidth(), color, shape);
     }
 
+    public  void updatePos(Vector2 vector2,int height, int width){
+        rectangle.set(new Rectangle(vector2.x, vector2.y, width, height));
+    }
 
     public Rectangle getRectangle() {
         return rectangle;

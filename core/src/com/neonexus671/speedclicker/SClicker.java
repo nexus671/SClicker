@@ -30,7 +30,7 @@ public class SClicker extends Game {
         densityIndependentSize = 75 * Gdx.graphics.getDensity();
         int fontSize = Math.round(densityIndependentSize);
         createFonts(fontSize);
-        setScreen(new PlayScreen(this));
+        setScreen(new com.neonexus671.speedclicker.screens.PlayScreen(this));
     }
 
     private void createFonts(int fontSize) {

@@ -1,4 +1,4 @@
-package com.neonexus671.speedclicker;
+package com.neonexus671.speedclicker.gridSystem;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -52,7 +52,23 @@ public class Grid {
             y = (int) Math.ceil((Gdx.graphics.getHeight() * (1.0 / size) * i));
             for (int k = 0; k < size; k++) {
                 x = (int) Math.ceil((Gdx.graphics.getWidth() * (1.0 / size) * k));
-                units.add(new Unit(shape, new Vector2(x, y), height, width));
+                units.add(new Unit(shape, new Vector2(x, y), height, width,false));
+            }
+        }
+    }
+
+    public void updateGridPos(){
+        int width = (int) Math.ceil(Gdx.graphics.getWidth() / (float) (size));
+        int height = (int) Math.ceil(Gdx.graphics.getHeight() / (float) (size));
+        int number = 0;
+        float x;
+        float y;
+        for (int i = 0; i < size; i++) {
+            y = (int) Math.ceil((Gdx.graphics.getHeight() * (1.0 / size) * i));
+            for (int k = 0; k < size; k++) {
+                x = (int) Math.ceil((Gdx.graphics.getWidth() * (1.0 / size) * k));
+                units.get(number).updatePos(new Vector2(x, y),height,width);
+                number++;
             }
         }
     }
@@ -116,6 +132,30 @@ public class Grid {
         }
         unit.setColor(Color.WHITE);
         numberOfWhiteSquares++;
+    }
+
+    public Random getRandom() {
+        return random;
+    }
+
+    public boolean isEmpty(){
+        return numberOfWhiteSquares == size*size;
+    }
+
+    public int getNumberOfWhiteSquares() {
+        return numberOfWhiteSquares;
+    }
+
+    public void setNumberOfWhiteSquares(int numberOfWhiteSquares) {
+        this.numberOfWhiteSquares = numberOfWhiteSquares;
+    }
+
+    public Array<colorNumber> getCountOfColors() {
+        return countOfColors;
+    }
+
+    public Array<Color> getColorArray() {
+        return colorArray;
     }
 
     public boolean isFull() {
