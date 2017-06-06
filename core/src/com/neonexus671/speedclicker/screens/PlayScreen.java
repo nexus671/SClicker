@@ -68,6 +68,7 @@ public class PlayScreen implements Screen {
     }
     private void correct(Unit u) {
         lastColorPressed = u.getColor();
+        u.playSound();
         grid.resetUnit(u);
         score++;
         timer = timer-5;
@@ -131,6 +132,5 @@ public class PlayScreen implements Screen {
 
     @Override
     public void dispose() {
-
     }
 }

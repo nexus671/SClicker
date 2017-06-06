@@ -1,6 +1,7 @@
 package com.neonexus671.speedclicker.gridSystem;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -17,6 +18,7 @@ public class Grid {
     private int numberOfWhiteSquares;
     private final Array<colorNumber> countOfColors;
     private final Array<Color> colorArray;
+    private final Array<Sound> soundArray;
 
     public Grid(int size) {
         this.random = new Random();
@@ -24,8 +26,10 @@ public class Grid {
         this.numberOfWhiteSquares = size * size;
         units = new Array<Unit>();
         colorArray = new Array<Color>();
+        soundArray = new Array<Sound>();
         countOfColors = new Array<colorNumber>();
         populateColorArray();
+        populateSoundArray();
         populateCountArray();
         createGrid(size, 0);
     }
@@ -37,6 +41,12 @@ public class Grid {
         colorArray.add(Color.ORANGE);
     }
 
+    private void populateSoundArray(){
+        soundArray.add(Gdx.audio.newSound(Gdx.files.internal("c5.ogg")));
+        soundArray.add(Gdx.audio.newSound(Gdx.files.internal("d5.ogg")));
+        soundArray.add(Gdx.audio.newSound(Gdx.files.internal("f5.ogg")));
+        soundArray.add(Gdx.audio.newSound(Gdx.files.internal("g5.ogg")));
+    }
     private void populateCountArray() {
         for (Color c : colorArray) {
             countOfColors.add(new colorNumber(c));
@@ -79,7 +89,9 @@ public class Grid {
             int randomNumber = random.nextInt((size * size));
             do {
                 if (units.get(randomNumber).getColor() == Color.WHITE) {
-                    units.get(randomNumber).setColor(randomizeColor());
+                    Color color = randomizeColor();
+                    units.get(randomNumber).setColor(color);
+                    units.get(randomNumber).setSound(soundArray.get(colorArray.indexOf(color,true)));
                     numberOfWhiteSquares--;
                 } else {
                     randomNumber = random.nextInt((size * size));

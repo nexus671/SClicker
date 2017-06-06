@@ -1,5 +1,7 @@
 package com.neonexus671.speedclicker.gridSystem;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.neonexus671.speedclicker.SClicker;
 
 import java.util.Random;
 
@@ -26,9 +29,11 @@ public class Unit extends Actor {
     private float alpha;
     private int shape;
     private Vector2 vector2;
+    private Sound sound;
 
     public Unit(int shape, Vector2 vector2, int height, int width,boolean colorFade) {
         this.color = Color.WHITE;
+        sound = null;
         random = new Random();
         setPosition(vector2.x, vector2.y);
         setWidth(width);
@@ -81,6 +86,37 @@ public class Unit extends Actor {
         return rectangle;
     }
 
+    public void playSound(){
+        sound.play(SClicker.volume);
+    }
+
+    public static float getAlphaDecreaseRate() {
+        return ALPHA_DECREASE_RATE;
+    }
+
+    public boolean isColorFade() {
+        return colorFade;
+    }
+
+    public void setColorFade(boolean colorFade) {
+        this.colorFade = colorFade;
+    }
+
+    public Random getRandom() {
+        return random;
+    }
+
+    public void setRectangle(Rectangle rectangle) {
+        this.rectangle = rectangle;
+    }
+
+    public Sound getSound() {
+        return sound;
+    }
+
+    public void setSound(Sound sound) {
+        this.sound = sound;
+    }
 
     public Sprite getSprite() {
         return sprite;
