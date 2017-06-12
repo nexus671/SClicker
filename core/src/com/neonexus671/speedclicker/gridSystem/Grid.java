@@ -12,13 +12,13 @@ import java.util.Random;
  * Created by acurr on 6/2/2017.
  */
 public class Grid {
-    private int size;
-    private Array<Unit> units;
     private final Random random;
-    private int numberOfWhiteSquares;
     private final Array<colorNumber> countOfColors;
     private final Array<Color> colorArray;
     private final Array<Sound> soundArray;
+    private int size;
+    private Array<Unit> units;
+    private int numberOfWhiteSquares;
 
     public Grid(int size) {
         this.random = new Random();
@@ -41,12 +41,13 @@ public class Grid {
         colorArray.add(Color.ORANGE);
     }
 
-    private void populateSoundArray(){
+    private void populateSoundArray() {
         soundArray.add(Gdx.audio.newSound(Gdx.files.internal("c5.ogg")));
         soundArray.add(Gdx.audio.newSound(Gdx.files.internal("d5.ogg")));
         soundArray.add(Gdx.audio.newSound(Gdx.files.internal("f5.ogg")));
         soundArray.add(Gdx.audio.newSound(Gdx.files.internal("g5.ogg")));
     }
+
     private void populateCountArray() {
         for (Color c : colorArray) {
             countOfColors.add(new colorNumber(c));
@@ -62,12 +63,12 @@ public class Grid {
             y = (int) Math.ceil((Gdx.graphics.getHeight() * (1.0 / size) * i));
             for (int k = 0; k < size; k++) {
                 x = (int) Math.ceil((Gdx.graphics.getWidth() * (1.0 / size) * k));
-                units.add(new Unit(shape, new Vector2(x, y), height, width,false));
+                units.add(new Unit(shape, new Vector2(x, y), height, width, false));
             }
         }
     }
 
-    public void updateGridPos(){
+    public void updateGridPos() {
         int width = (int) Math.ceil(Gdx.graphics.getWidth() / (float) (size));
         int height = (int) Math.ceil(Gdx.graphics.getHeight() / (float) (size));
         int number = 0;
@@ -77,7 +78,7 @@ public class Grid {
             y = (int) Math.ceil((Gdx.graphics.getHeight() * (1.0 / size) * i));
             for (int k = 0; k < size; k++) {
                 x = (int) Math.ceil((Gdx.graphics.getWidth() * (1.0 / size) * k));
-                units.get(number).updatePos(new Vector2(x, y),height,width);
+                units.get(number).updatePos(new Vector2(x, y), height, width);
                 number++;
             }
         }
@@ -91,7 +92,7 @@ public class Grid {
                 if (units.get(randomNumber).getColor() == Color.WHITE) {
                     Color color = randomizeColor();
                     units.get(randomNumber).setColor(color);
-                    units.get(randomNumber).setSound(soundArray.get(colorArray.indexOf(color,true)));
+                    units.get(randomNumber).setSound(soundArray.get(colorArray.indexOf(color, true)));
                     numberOfWhiteSquares--;
                 } else {
                     randomNumber = random.nextInt((size * size));
@@ -150,8 +151,8 @@ public class Grid {
         return random;
     }
 
-    public boolean isEmpty(){
-        return numberOfWhiteSquares == size*size;
+    public boolean isEmpty() {
+        return numberOfWhiteSquares == size * size;
     }
 
     public int getNumberOfWhiteSquares() {

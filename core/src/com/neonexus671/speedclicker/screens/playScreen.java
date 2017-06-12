@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.neonexus671.speedclicker.gridSystem.Grid;
 import com.neonexus671.speedclicker.SClicker;
+import com.neonexus671.speedclicker.gridSystem.Grid;
 import com.neonexus671.speedclicker.gridSystem.Unit;
 
 import java.util.Random;
@@ -15,16 +15,16 @@ import java.util.Random;
 /**
  * Created by acurr on 6/2/2017.
  */
-public class PlayScreen implements Screen {
+public class playScreen implements Screen {
     private final SClicker game;
     private final Viewport gameViewPort;
+    private final Grid grid;
+    private final Random random;
     private int timer;
     private int score;
-    private final Grid grid;
     private Color lastColorPressed;
-    private final Random random;
 
-    public PlayScreen(SClicker game) {
+    public playScreen(SClicker game) {
         this.game = game;
         random = new Random();
         timer = 100;
@@ -55,7 +55,7 @@ public class PlayScreen implements Screen {
         if (Gdx.input.justTouched()) {
             handleInput();
         }
-        if(grid.isEmpty()){
+        if (grid.isEmpty()) {
             grid.randomSpawnColor();
         }
         createRandomSpawn();
@@ -63,16 +63,16 @@ public class PlayScreen implements Screen {
         game.batch.end();
     }
 
-    private void incorrect() {
-        System.out.println("Death");
+    public int getScore() {
+        return score;
     }
-    private void correct(Unit u) {
-        lastColorPressed = u.getColor();
-        u.playSound();
-        grid.resetUnit(u);
-        score++;
-        timer = timer-5;
-        System.out.println(score);
+
+    private void incorrect() {
+        if(score > game.preferences.getInteger("HighScore")){
+            game.preferences.putInteger("HighScore",score);
+            game.preferences.flush();
+        }
+        game.setScreen(new gameOverScreen(game,this));
     }
 
     private void handleInput() {
@@ -103,12 +103,19 @@ public class PlayScreen implements Screen {
         }
     }
 
-    private int getMaxSpawn(){
-        float size = grid.getSize();
-        return  (int)Math.ceil(size*size * .3);
+    private void correct(Unit u) {
+        lastColorPressed = u.getColor();
+        u.playSound();
+        grid.resetUnit(u);
+        score++;
+        timer = timer - 5;
+        System.out.println(score);
     }
 
-
+    private int getMaxSpawn() {
+        float size = grid.getSize();
+        return (int) Math.ceil(size * size * .3);
+    }
 
     @Override
     public void resize(int width, int height) {

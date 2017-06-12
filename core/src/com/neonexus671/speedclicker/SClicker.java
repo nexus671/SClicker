@@ -7,6 +7,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.neonexus671.speedclicker.screens.playScreen;
 
 public class SClicker extends Game {
     public static final String SF_TTF = "SF.ttf";
@@ -22,6 +24,7 @@ public class SClicker extends Game {
     public float aspectRatio;
     public float densityIndependentSize;
     public Preferences preferences;
+    public Skin skin;
 
     @Override
     public void create() {
@@ -30,9 +33,18 @@ public class SClicker extends Game {
         densityIndependentSize = 75 * Gdx.graphics.getDensity();
         int fontSize = Math.round(densityIndependentSize);
         createFonts(fontSize);
-        setScreen(new com.neonexus671.speedclicker.screens.PlayScreen(this));
+        skin = new Skin(Gdx.files.internal("ui/skin/flat-earth-ui.json"));
+        createPreferences();
+        setScreen(new playScreen(this));
     }
+    private void createPreferences(){
+        preferences = Gdx.app.getPreferences("SClicker");
+        if(!preferences.contains("HighScore")){
+            preferences.putInteger("HighScore",0);
+            preferences.flush();
+        }
 
+    }
     private void createFonts(int fontSize) {
         FileHandle fontFile = Gdx.files.internal(SF_TTF);
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);

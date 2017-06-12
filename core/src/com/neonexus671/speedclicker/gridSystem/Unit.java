@@ -1,6 +1,5 @@
 package com.neonexus671.speedclicker.gridSystem;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -20,8 +19,8 @@ import java.util.Random;
  */
 public class Unit extends Actor {
     private static final float ALPHA_DECREASE_RATE = .002F;
-    private boolean colorFade;
     private final Random random;
+    private boolean colorFade;
     private Rectangle rectangle;
     private Color color;
     private Sprite sprite;
@@ -31,7 +30,7 @@ public class Unit extends Actor {
     private Vector2 vector2;
     private Sound sound;
 
-    public Unit(int shape, Vector2 vector2, int height, int width,boolean colorFade) {
+    public Unit(int shape, Vector2 vector2, int height, int width, boolean colorFade) {
         this.color = Color.WHITE;
         sound = null;
         random = new Random();
@@ -48,13 +47,16 @@ public class Unit extends Actor {
     }
 
 
-
     private void createTexture(int height, int width, Color color, int shape) {
         Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
         pixmap.setColor(color);
         pixmap.fillRectangle(0, 0, width, height);
         texture = new Texture(pixmap);
         pixmap.dispose();
+    }
+
+    public static float getAlphaDecreaseRate() {
+        return ALPHA_DECREASE_RATE;
     }
 
     @Override
@@ -78,7 +80,7 @@ public class Unit extends Actor {
         createTexture((int) getHeight(), (int) getWidth(), color, shape);
     }
 
-    public  void updatePos(Vector2 vector2,int height, int width){
+    public void updatePos(Vector2 vector2, int height, int width) {
         rectangle.set(new Rectangle(vector2.x, vector2.y, width, height));
     }
 
@@ -86,12 +88,12 @@ public class Unit extends Actor {
         return rectangle;
     }
 
-    public void playSound(){
-        sound.play(SClicker.volume);
+    public void setRectangle(Rectangle rectangle) {
+        this.rectangle = rectangle;
     }
 
-    public static float getAlphaDecreaseRate() {
-        return ALPHA_DECREASE_RATE;
+    public void playSound() {
+        sound.play(SClicker.volume);
     }
 
     public boolean isColorFade() {
@@ -104,10 +106,6 @@ public class Unit extends Actor {
 
     public Random getRandom() {
         return random;
-    }
-
-    public void setRectangle(Rectangle rectangle) {
-        this.rectangle = rectangle;
     }
 
     public Sound getSound() {
